@@ -11,3 +11,5 @@
 ## ANNEXE
 ### Matériel utilisé:
 * Carte CoraZ7 (Xilinx)
+* Langage VHDL
+* Logiciel VIVADO
