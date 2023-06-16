@@ -8,82 +8,82 @@ end tb_count_x;
 architecture behavioral of tb_count_x is
 
     ------------------------------------------
-	-- DECLARATION DES SIGNAUX INTERNES
+    -- DECLARATION DES SIGNAUX INTERNES
     ------------------------------------------
-	signal reset       : std_logic := '1';
-	signal clk_25      : std_logic := '0';
-	signal x           : std_logic_vector(9 downto 0);	
-	signal end_count_x : std_logic;
+    signal reset       : std_logic := '1';
+    signal clk_25      : std_logic := '0';
+    signal x           : std_logic_vector(9 downto 0);	
+    signal end_count_x : std_logic;
 	
 	
     ------------------------------------------
-	-- DECLARATION DES CONSTANTES
+    -- DECLARATION DES CONSTANTES
     ------------------------------------------
-	-- Les constantes suivantes permettent de definir la frequence de l'horloge 
-	constant hp : time := 20 ns;             -- demi periode de 20ns
-	constant period : time := 2*hp;          -- periode de 40ns, soit une frequence de 25MHz
+    -- Les constantes suivantes permettent de definir la frequence de l'horloge 
+    constant hp           : time      := 20 ns;             -- demi periode de 20ns
+    constant period       : time      := 2*hp;              -- periode de 40ns, soit une frequence de 25MHz
 	
-    constant H_PIX      : integer   := 640;
-    constant H_FPORCH   : integer   := 16;
-    constant HSYNC_SIZE : integer   := 96;
-    constant H_BPORCH   : integer   := 48;	
+    constant H_PIX        : integer   := 640;
+    constant H_FPORCH     : integer   := 16;
+    constant HSYNC_SIZE   : integer   := 96;
+    constant H_BPORCH     : integer   := 48;	
     constant count_max    : integer   := H_PIX + H_FPORCH + HSYNC_SIZE + H_BPORCH;    -- nombre de pixels sur une ligne (image + zone blanche)
 	
-	constant COUNTER_SIZE : integer := 10;     -- Nombre bits sur lequel est code le compteur x
+    constant COUNTER_SIZE : integer := 10;     -- Nombre bits sur lequel est code le compteur x
 
 	
     ------------------------------------------
-	-- COMPOSANT A TESTER
+    -- COMPOSANT A TESTER
     ------------------------------------------
     component count_x
-	   generic(
-	        H_PIX           : integer;
+        generic(
+            H_PIX           : integer;
             H_FPORCH        : integer;
             HSYNC_SIZE      : integer;
             H_BPORCH        : integer
-       );
+        );
         port ( 
-			clk_25		    : in std_logic;
-			reset           : in std_logic; 
-			x        	    : out std_logic_vector(9 downto 0);
-			end_count_x	    : out std_logic
-		 );
-	end component;
+            clk_25          : in std_logic;
+            reset           : in std_logic; 
+            x        	    : out std_logic_vector(9 downto 0);
+            end_count_x	    : out std_logic
+        );
+    end component;
 	
 	
 
-	begin
+    begin
 	
     ------------------------------------------
-	-- AFFECTATION DES SIGNAUX
+    -- AFFECTATION DES SIGNAUX
     ------------------------------------------
-	mapping_count_x: count_x
-	   generic map(
-	        H_PIX => H_PIX,
-            H_FPORCH => H_FPORCH,
-            HSYNC_SIZE => HSYNC_SIZE,
-            H_BPORCH => H_BPORCH
-       )
-       port map (
-            clk_25 => clk_25,
-            reset => reset,
-            x => x,
+    mapping_count_x: count_x
+        generic map(
+            H_PIX       => H_PIX,
+            H_FPORCH    => H_FPORCH,
+            HSYNC_SIZE  => HSYNC_SIZE,
+            H_BPORCH    => H_BPORCH
+        )
+        port map (
+            clk_25      => clk_25,
+            reset       => reset,
+            x           => x,
             end_count_x => end_count_x
-       );
+        );
 
    		
     ------------------------------------------
-	-- SIMULATION DE L'HORLOGE
+    -- SIMULATION DE L'HORLOGE
     ------------------------------------------
-	process
+    process
     begin
-		wait for hp;
-		clk_25 <= not clk_25;
-	end process;
+        wait for hp;
+        clk_25 <= not clk_25;
+    end process;
 
 
-	process
-	begin
+    process
+    begin
         ---------------------------------------------
         -- INITIALISATION
         ---------------------------------------------
