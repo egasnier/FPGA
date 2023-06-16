@@ -1,3 +1,20 @@
+----------------------------------------------------------------------------------
+-- Engineer: Adjo SEFOFO & Eric GASNIER
+-- 
+-- Create Date: 16.06.2023
+-- Module Name: count_unit
+-- Project Name: Image processing & VGA display
+-- Target Devices: coraZ7 (Xilinx)
+-- Tool Versions: VIVADO 2020.2
+-- Description: Testbench for component count_x
+-- 
+-- Dependencies: Pmod VGA (digilent)
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- 
+----------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;

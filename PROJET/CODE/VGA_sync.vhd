@@ -1,3 +1,20 @@
+----------------------------------------------------------------------------------
+-- Engineer: Adjo SEFOFO & Eric GASNIER
+-- 
+-- Create Date: 16.06.2023
+-- Module Name: VGA_sync
+-- Project Name: Image processing & VGA display
+-- Target Devices: coraZ7 (Xilinx)
+-- Tool Versions: VIVADO 2020.2
+-- Description: Component generating synchronization signals for VGA and coordinates (x, y)
+-- 
+-- Dependencies: Pmod VGA (digilent)
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- 
+----------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;

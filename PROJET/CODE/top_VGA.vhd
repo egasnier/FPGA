@@ -1,20 +1,18 @@
 ----------------------------------------------------------------------------------
--- Company: 
--- Engineer: 
+-- Engineer: Adjo SEFOFO & Eric GASNIER
 -- 
--- Create Date: 14.06.2023 17:44:48
--- Design Name: 
--- Module Name: top_Gen - Behavioral
--- Project Name: 
--- Target Devices: 
--- Tool Versions: 
--- Description: 
+-- Create Date: 16.06.2023
+-- Module Name: count_unit
+-- Project Name: Image processing & VGA display
+-- Target Devices: coraZ7 (Xilinx)
+-- Tool Versions: VIVADO 2020.2
+-- Description: Component used to display a chessboard on a screen in VGA format
+--              Calculation of RGB signals only + Synchronization signals
 -- 
--- Dependencies: 
+-- Dependencies: Pmod VGA (digilent)
 -- 
 -- Revision:
 -- Revision 0.01 - File Created
--- Additional Comments:
 -- 
 ----------------------------------------------------------------------------------
 

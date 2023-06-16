@@ -1,9 +1,22 @@
 ----------------------------------------------------------------------------------
-
--- Company: 
--- Eric et Sefofo
-
+-- Engineer: Adjo SEFOFO & Eric GASNIER
+-- 
+-- Create Date: 16.06.2023
+-- Module Name: count_unit
+-- Project Name: Image processing & VGA display
+-- Target Devices: coraZ7 (Xilinx)
+-- Tool Versions: VIVADO 2020.2
+-- Description: Component used to display a chessboard on a screen in VGA format 
+--              Calculation of RGB signals only
+-- 
+-- Dependencies: Pmod VGA (digilent)
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- 
 ----------------------------------------------------------------------------------
+
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
