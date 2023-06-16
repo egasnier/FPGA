@@ -5,14 +5,14 @@ use ieee.std_logic_unsigned.all;
 
 entity counter_unit is
     generic(
-        count_max : natural := 800;   -- Valeur du nombre de périodes à compter
-        nb_bit : integer := 10        -- Nombre de bits sur lequel est code le compteur
+        count_max      : natural := 800;      -- Valeur du nombre de périodes à compter
+        nb_bit         : integer := 10        -- Nombre de bits sur lequel est code le compteur
     );
     port ( 
-		clk			   : in std_logic;    -- Horloge
-		reset          : in std_logic;    -- Entrée pour RESET des registres
-		counter        : out std_logic_vector((nb_bit-1) downto 0);  -- Signal en sortie du registre du compteur
-        end_counter	   : out std_logic    -- Sortie indiquant la fin du comptage
+        clk            : in std_logic;        -- Horloge
+        reset          : in std_logic;        -- Entrée pour RESET des registres
+        counter        : out std_logic_vector((nb_bit-1) downto 0);  -- Signal en sortie du registre du compteur
+        end_counter    : out std_logic        -- Sortie indiquant la fin du comptage
     );
 end counter_unit;
 
@@ -22,36 +22,36 @@ architecture behavioral of counter_unit is
     -- SIGNAUX INTERNES 
     --------------------
 	signal Qout_cnt    : std_logic_vector((nb_bit-1) downto 0); -- Signal en sortie du registre du compteur
-	signal cmd         : std_logic := '0';             -- Recopie du signal end_counter pour utilisation dans partie sequentielle
+	signal cmd         : std_logic := '0';                      -- Recopie du signal end_counter pour utilisation dans partie sequentielle
 	
 	
 	begin
 
         ----------------------
-		-- PARTIE SEQUENTIELLE	
+        -- PARTIE SEQUENTIELLE	
         ----------------------
-		process(clk,reset)
-		begin
-			if(reset = '1') then
-			    Qout_cnt <= (others => '0');
+        process(clk,reset)
+        begin
+            if(reset = '1') then
+                Qout_cnt <= (others => '0');
 
-			elsif rising_edge(clk) then
-			    if (cmd = '1') then
-			         Qout_cnt <= (others => '0');
-			    else
-			         Qout_cnt <= Qout_cnt + 1;
-			    end if;
-			end if;
-		end process;
+            elsif rising_edge(clk) then
+                if (cmd = '1') then
+                    Qout_cnt <= (others => '0');
+                else
+                    Qout_cnt <= Qout_cnt + 1;
+                end if;
+            end if;
+        end process;
 
 
-		----------------------
-		-- PARTIE COMBINATOIRE
         ----------------------
-		cmd <= '1' when (Qout_cnt = (count_max - 1))
-				else '0';
-		end_counter <= cmd;             -- Copie du signal end_counter
+        -- PARTIE COMBINATOIRE
+        ----------------------
+        cmd <= '1' when (Qout_cnt = (count_max - 1))
+            else '0';
+        end_counter <= cmd;             -- Copie du signal end_counter
 		
-		counter <= Qout_cnt;
+        counter <= Qout_cnt;
 		
 end behavioral;

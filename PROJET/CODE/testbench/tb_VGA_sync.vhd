@@ -8,90 +8,90 @@ end tb_VGA_sync;
 
 architecture behavioral of tb_VGA_sync is
 
-	signal reset       : std_logic := '1';
-	signal clk_25      : std_logic := '0';
-	signal hsync       : std_logic;
-	signal vsync       : std_logic;
-	signal in_display  : std_logic;
+    signal reset       : std_logic := '1';
+    signal clk_25      : std_logic := '0';
+    signal hsync       : std_logic;
+    signal vsync       : std_logic;
+    signal in_display  : std_logic;
 
     ------------------------------------------
-	-- DECLARATION DES CONSTANTES
+    -- DECLARATION DES CONSTANTES
     ------------------------------------------
-    constant H_PIX      : integer := 640;
-    constant H_FPORCH   : integer := 16;
-    constant HSYNC_SIZE : integer := 96;
-    constant H_BPORCH   : integer := 48;
-    constant count_max_x : integer  := H_PIX + H_FPORCH + HSYNC_SIZE + H_BPORCH;    -- nombre de pixels sur une ligne (image + zone blanche)
+    constant H_PIX       : integer := 640;
+    constant H_FPORCH    : integer := 16;
+    constant HSYNC_SIZE  : integer := 96;
+    constant H_BPORCH    : integer := 48;
+    constant count_max_x : integer := H_PIX + H_FPORCH + HSYNC_SIZE + H_BPORCH;    -- nombre de pixels sur une ligne (image + zone blanche)
     
-    constant V_PIX      : integer := 480;
-    constant V_FPORCH   : integer := 10;
-    constant VSYNC_SIZE : integer := 2;
-    constant V_BPORCH   : integer := 33;
-    constant count_max_y : integer  := V_PIX + V_FPORCH + VSYNC_SIZE + V_BPORCH;    -- nombre de pixels sur une colonne (image + zone blanche)
+    constant V_PIX       : integer := 480;
+    constant V_FPORCH    : integer := 10;
+    constant VSYNC_SIZE  : integer := 2;
+    constant V_BPORCH    : integer := 33;
+    constant count_max_y : integer := V_PIX + V_FPORCH + VSYNC_SIZE + V_BPORCH;    -- nombre de pixels sur une colonne (image + zone blanche)
     	
-	-- Les constantes suivantes permettent de definir la frequence de l'horloge 
-	constant hp : time := 20 ns;             -- demi periode de 20ns
-	constant period : time := 2*hp;          -- periode de 40ns, soit une frequence de 25MHz
+    -- Les constantes suivantes permettent de definir la frequence de l'horloge 
+    constant hp     : time := 20 ns;             -- demi periode de 20ns
+    constant period : time := 2*hp;              -- periode de 40ns, soit une frequence de 25MHz
 
 
     ------------------------------------------
-	-- DECLARATION DU COMPOSANT VGA_sync
+    -- DECLARATION DU COMPOSANT VGA_sync
     ------------------------------------------
-	component VGA_sync
-	    generic (
-            H_PIX      : integer;
-            H_FPORCH   : integer;
-            HSYNC_SIZE : integer;
-            H_BPORCH   : integer;
-            V_PIX      : integer;
-            V_FPORCH   : integer;
-            VSYNC_SIZE : integer;
-            V_BPORCH   : integer
+    component VGA_sync
+        generic (
+            H_PIX       : integer;
+            H_FPORCH    : integer;
+            HSYNC_SIZE  : integer;
+            H_BPORCH    : integer;
+            V_PIX       : integer;
+            V_FPORCH    : integer;
+            VSYNC_SIZE  : integer;
+            V_BPORCH    : integer
         );
-		port ( 
-			clk_25		    : in std_logic;
-			reset           : in std_logic; 
-			hsync   	    : out std_logic;
-			vsync   	    : out std_logic;
-			in_display	    : out std_logic
-		 );
+        port ( 
+            clk_25      : in std_logic;
+            reset       : in std_logic; 
+            hsync   	: out std_logic;
+            vsync   	: out std_logic;
+            in_display	: out std_logic
+        );
 	end component;
 
 
 	begin
 	
     --------------------------	
-	-- AFFECTATION DES SIGNAUX
+    -- AFFECTATION DES SIGNAUX
     --------------------------	
-	--Affectation des signaux du testbench avec ceux de l'entite count_x
-	mapping_VGA_sync: VGA_sync
+    --Affectation des signaux du testbench avec ceux de l'entite count_x
+    mapping_VGA_sync: VGA_sync
 	    generic map (
-            H_PIX => H_PIX,
-            H_FPORCH => H_FPORCH, 
+            H_PIX      => H_PIX,
+            H_FPORCH   => H_FPORCH, 
             HSYNC_SIZE => HSYNC_SIZE,
-            H_BPORCH => H_BPORCH,
-            V_PIX => V_PIX,
-            V_FPORCH => V_FPORCH,
+            H_BPORCH   => H_BPORCH,
+            V_PIX      => V_PIX,
+            V_FPORCH   => V_FPORCH,
             VSYNC_SIZE => VSYNC_SIZE,
-            V_BPORCH => V_BPORCH
+            V_BPORCH   => V_BPORCH
         )
         port map (
-            clk_25 => clk_25,
-            reset => reset,
-            hsync => hsync,
-            vsync => vsync,
+            clk_25     => clk_25,
+            reset      => reset,
+            hsync      => hsync,
+            vsync      => vsync,
             in_display => in_display
         );
 
 
     ------------------------------------------
-	-- SIMULATION DE L'HORLOGE
+    -- SIMULATION DE L'HORLOGE
     ------------------------------------------
-	process
+    process
     begin
-		wait for hp;
-		clk_25 <= not clk_25;
-	end process;
+        wait for hp;
+        clk_25 <= not clk_25;
+    end process;
 
 
 	process
