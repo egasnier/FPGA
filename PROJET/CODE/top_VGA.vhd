@@ -25,6 +25,16 @@ use ieee.numeric_std.all;
 
 
 entity top_VGA is
+    generic (
+        H_PIX          : integer := 640;                     -- Taille de l'image horizontale
+        H_FPORCH       : integer := 16;                      -- Front porch horizontal
+        HSYNC_SIZE     : integer := 96;                      -- Horizontal sync pulse
+        H_BPORCH       : integer := 48;                      -- Back porch horizontal
+        V_PIX          : integer := 480;                     -- Taille de l'image verticale
+        V_FPORCH       : integer := 10;                      -- Front porch vertical
+        VSYNC_SIZE     : integer := 2;                       -- Vertical sync pulse
+        V_BPORCH       : integer := 33                       -- Back porch vertical
+    );
     port (
         clk            : in std_logic;
         reset          : in std_logic;
@@ -63,7 +73,7 @@ architecture Behavioral of top_VGA is
         port ( 
             clk            : in std_logic;     -- horloge à 125MHZ
             reset          : in std_logic;     -- bouton de reset
-            clk_25       : out std_logic;    -- horloge à 25.175MHZ
+            clk_25         : out std_logic;    -- horloge à 25.175MHZ
             locked         : out std_logic     -- bouton de reset
         );
     end component;	
@@ -73,6 +83,16 @@ architecture Behavioral of top_VGA is
     -- DECLARATION DU COMPOSANT VGA_sync
     ------------------------------------------
     component VGA_sync
+        generic (
+            H_PIX       : integer;
+            H_FPORCH    : integer;
+            HSYNC_SIZE  : integer;
+            H_BPORCH    : integer;
+            V_PIX       : integer;
+            V_FPORCH    : integer;
+            VSYNC_SIZE  : integer;
+            V_BPORCH    : integer
+        );
         port ( 
             clk_25         : in std_logic;                         -- Horloge
             reset          : in std_logic;                         -- Entrée pour RESET des registres
@@ -120,8 +140,18 @@ architecture Behavioral of top_VGA is
 
     --Affectation des signaux du module Vga_sync
     mapping_VGA_sync : VGA_sync
+    generic map (
+        H_PIX        => H_PIX,
+        H_FPORCH     => H_FPORCH, 
+        HSYNC_SIZE   => HSYNC_SIZE,
+        H_BPORCH     => H_BPORCH,
+        V_PIX        => V_PIX,
+        V_FPORCH     => V_FPORCH,
+        VSYNC_SIZE   => VSYNC_SIZE,
+        V_BPORCH     => V_BPORCH
+    )
     port map (
-        clk_25	     =>	clk_25,  
+        clk_25       =>	clk_25,  
         reset        => lockedn ,   
         hsync        =>	hsync , 
         vsync        =>	vsync ,   
