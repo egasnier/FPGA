@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------
--- Engineer: Adjo SEFOFO & Eric GASNIER
+-- Engineer: Adjo Sefofo SOKPOR & Eric GASNIER
 -- 
 -- Create Date: 16.06.2023
 -- Module Name: count_y

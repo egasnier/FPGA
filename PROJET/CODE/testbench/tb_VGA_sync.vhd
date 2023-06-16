@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------
--- Engineer: Adjo SEFOFO & Eric GASNIER
+-- Engineer: Adjo Sefofo SOKPOR & Eric GASNIER
 -- 
 -- Create Date: 16.06.2023
 -- Module Name: tb_VGA_sync
@@ -82,7 +82,7 @@ architecture behavioral of tb_VGA_sync is
     --------------------------	
     --Affectation des signaux du testbench avec ceux de l'entite count_x
     mapping_VGA_sync: VGA_sync
-	    generic map (
+	generic map (
             H_PIX      => H_PIX,
             H_FPORCH   => H_FPORCH, 
             HSYNC_SIZE => HSYNC_SIZE,
