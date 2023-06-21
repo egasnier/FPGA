@@ -185,6 +185,49 @@ architecture behavioral of tb_conv_module is
         wait for period;
 
 
+        p_1 <= "1111";
+        p_2 <= "0000";
+        p_3 <= "1111";
+        p_4 <= "0000";
+        p_5 <= "1111";
+        p_6 <= "0000";
+        p_7 <= "1111";
+        p_8 <= "0000";
+        p_9 <= "1111";
+
+
+        wait for period;
+
+
+        assert out_filt_1 = "1111"
+            report "ERROR: out_filt_1 incorrect" severity failure;
+        assert out_filt_2 = "0111"
+            report "ERROR: out_filt_2 incorrect" severity failure;
+
+
+        wait for period;
+
+
+        p_1 <= "0000";
+        p_2 <= "1111";
+        p_3 <= "0000";
+        p_4 <= "1111";
+        p_5 <= "0010";
+        p_6 <= "1111";
+        p_7 <= "0000";
+        p_8 <= "1111";
+        p_9 <= "0000";
+
+
+        wait for period;
+
+
+        assert out_filt_1 = "0010"
+            report "ERROR: out_filt_1 incorrect" severity failure;
+        assert out_filt_2 = "1000"
+            report "ERROR: out_filt_2 incorrect" severity failure;
+
+
         wait;
 	   
     end process;
