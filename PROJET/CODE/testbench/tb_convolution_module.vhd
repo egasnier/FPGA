@@ -26,6 +26,7 @@ end tb_conv_module;
 architecture behavioral of tb_conv_module is
 
     signal clk           : std_logic := '0';
+    signal cmd_conv      : std_logic :='1';
 
     signal p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9 : std_logic_vector(3 downto 0) := "0000";
     signal out_filt_1 : std_logic_vector(3 downto 0);      -- Id matrix
@@ -47,6 +48,7 @@ architecture behavioral of tb_conv_module is
     component convolution_module
         port ( 
             p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9 : in std_logic_vector(3 downto 0);
+            cmd_conv   : in std_logic;
             out_filt_1 : out std_logic_vector(3 downto 0);      -- Id matrix
             out_filt_2 : out std_logic_vector(3 downto 0);      -- Gaussian filter
             out_filt_3 : out std_logic_vector(3 downto 0);      -- To be defined
@@ -72,6 +74,7 @@ architecture behavioral of tb_conv_module is
             p_7            => p_7,
             p_8            => p_8,
             p_9            => p_9,
+            cmd_conv       => cmd_conv,
             out_filt_1     => out_filt_1,
             out_filt_2     => out_filt_2,
             out_filt_3     => out_filt_3,

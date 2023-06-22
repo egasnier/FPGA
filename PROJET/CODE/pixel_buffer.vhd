@@ -48,7 +48,7 @@ architecture behavioral of pixel_buffer is
     type state_FSM is (idle_state, read_state);   -- Définition des états du FSM
     signal current_state : state_FSM;             -- etat dans lequel on se trouve actuellement
     signal next_state    : state_FSM;	          -- etat dans lequel on passera au prochain 
-    signal cmd_read      : std_logic;	
+    signal cmd_reader    : std_logic;	
     signal end_count     : std_logic;	
 
 
@@ -79,7 +79,7 @@ architecture behavioral of pixel_buffer is
             srst   => reset,
             wr_en  => '1',
             din    => d_buffer,
-            rd_en  => cmd_read,
+            rd_en  => cmd_reader,
             dout   => out_FIFO
         );
 
@@ -107,7 +107,7 @@ architecture behavioral of pixel_buffer is
             else '0';
 
         -- Signal de sortie
-        q_buffer <= out_FIFO  when cmd_read = '1'
+        q_buffer <= out_FIFO  when cmd_reader = '1'
             else "0000";
 
 
@@ -120,7 +120,7 @@ architecture behavioral of pixel_buffer is
             --signaux pilotes par la fsm
             case current_state is
                 when idle_state =>
-                    cmd_read <= '0';
+                    cmd_reader <= '0';
                     if end_count = '1' then
                         next_state <= read_state; --prochain etat
                     else
@@ -129,12 +129,11 @@ architecture behavioral of pixel_buffer is
               
 
                 when read_state =>
-                    cmd_read <= '1';
+                    cmd_reader <= '1';
                     next_state <= read_state;
        
             end case;
-              
-          
+                      
         end process;
 
 		

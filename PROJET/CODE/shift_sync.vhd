@@ -28,6 +28,7 @@ entity shift_sync is
         hsync          : in std_logic;            -- Synchronization horizontale
         vsync          : in std_logic;            -- Synchronization verticale
         end_count_x    : in std_logic;            -- Fin de lecture d'une ligne
+        cmd_conv       : out std_logic;           -- Signal de commande du module convolution
         hsync_shifted  : out std_logic;           -- Synchronization horizontale retardée de 802 pixels
         vsync_shifted  : out std_logic            -- Synchronization verticale retardée de 802 pixels
     );
@@ -51,7 +52,7 @@ architecture behavioral of shift_sync is
     type state_FSM is (idle_state, sync_state);   -- Définition des états du FSM
     signal current_state : state_FSM;             -- etat dans lequel on se trouve actuellement
     signal next_state    : state_FSM;	          -- etat dans lequel on passera au prochain 
-    signal cmd_sync      : std_logic;	
+    signal cmd_sync, cmd_reg0, cmd_reg1 : std_logic;	
 	
 		
 
@@ -78,6 +79,9 @@ architecture behavioral of shift_sync is
                 hsync_reg0 <= hsync;
                 vsync_reg1 <= vsync_reg0;
                 vsync_reg0 <= vsync;
+                
+                cmd_reg1 <= cmd_reg0;
+                cmd_reg0 <= cmd_sync;
                 			    
             end if;
         end process;
@@ -94,6 +98,8 @@ architecture behavioral of shift_sync is
         vsync_shifted <= vsync_reg1 when cmd_sync = '1'
             else '1';
 
+        -- Signal de commande du module de convolution
+        cmd_conv <= cmd_reg1;
 
         ----------------------
         -- FSM

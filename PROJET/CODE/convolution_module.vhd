@@ -1,8 +1,8 @@
 ----------------------------------------------------------------------------------
 -- Engineer: Adjo Sefofo SOKPOR & Eric GASNIER
 -- 
--- Create Date: 16.06.2023
--- Module Name: shift_sync
+-- Create Date: 22.06.2023
+-- Module Name: convolution_module
 -- Project Name: Image processing & VGA display
 -- Target Devices: coraZ7 (Xilinx)
 -- Tool Versions: VIVADO 2020.2
@@ -26,6 +26,7 @@ use ieee.numeric_std.all;
 entity convolution_module is
 	port(
 		p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9 : in std_logic_vector(3 downto 0);
+		cmd_conv   : in std_logic;
 		out_filt_1 : out std_logic_vector(3 downto 0);      -- Id matrix
 		out_filt_2 : out std_logic_vector(3 downto 0);      -- Gaussian filter
 		out_filt_3 : out std_logic_vector(3 downto 0);      -- To be defined
@@ -38,17 +39,17 @@ architecture arch_conv_module of convolution_module is
     ----------------------------------------------
     -- SIGNAUX INTERNES PARTIE COMBINATOIRE
     ----------------------------------------------
-    signal out_sum: std_logic_vector(7 downto 0);
+    signal out_sum            : std_logic_vector(7 downto 0);
 	signal p_1_8b, p_2_8b, p_3_8b, p_4_8b, p_5_8b, p_6_8b, p_7_8b, p_8_8b, p_9_8b: std_logic_vector(7 downto 0);
 
 
 	begin
 
-
         -----------------------------------------
         -- PARTIE COMBINATOIRE : Id MATRIX
         -----------------------------------------
-    	out_filt_1 <= p_5;
+    	out_filt_1 <= p_5 when cmd_conv ='1'
+                           else "0000";
 
 
         -----------------------------------------
@@ -76,7 +77,9 @@ architecture arch_conv_module of convolution_module is
                      );
 
         -- Division by 16
-        out_filt_2 <= out_sum(7) & out_sum(6) & out_sum(5) & out_sum(4);
+        out_filt_2 <= out_sum(7) & out_sum(6) & out_sum(5) & out_sum(4) when cmd_conv ='1'
+                                                                        else "0000";
 
+      
 
 end arch_conv_module;

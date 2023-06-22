@@ -30,6 +30,8 @@ entity buffer_module_tb is
 end buffer_module_tb;
 
 architecture arch_buffer_module_tb of buffer_module_tb is
+
+
 	component buffer_module
 		port(
 			clk, reset: in std_logic;
@@ -40,12 +42,13 @@ architecture arch_buffer_module_tb of buffer_module_tb is
 			pixel_3, pixel_4, pixel_5:out std_logic_vector(3 downto 0);
 			pixel_6, pixel_7, pixel_8, pixel_9: out std_logic_vector(3 downto 0));
 	end component;
+
 	
-	signal clk: std_ulogic := '1';
-	signal reset: std_logic:='1';
-	signal x: std_logic_vector(9 downto 0):= "0000000000";
-	signal d: std_logic_vector(3 downto 0) := "0000";
-	signal pixel_1, pixel_2, pixel_3, pixel_4, pixel_5,
+    signal clk   : std_ulogic                   := '1';
+    signal reset : std_logic                    :='1';
+    signal x     : std_logic_vector(9 downto 0) := "0000000000";
+    signal d     : std_logic_vector(3 downto 0) := "0000";
+    signal pixel_1, pixel_2, pixel_3, pixel_4, pixel_5,
 	       pixel_6, pixel_7, pixel_8, pixel_9: std_logic_vector(3 downto 0);
 
 
@@ -60,7 +63,7 @@ architecture arch_buffer_module_tb of buffer_module_tb is
 
 	begin
 		unit: buffer_module
-			port map(
+		port map(
 			clk => clk, 
 			reset => reset, 
 			data_in => d, 
@@ -74,7 +77,7 @@ architecture arch_buffer_module_tb of buffer_module_tb is
 			pixel_7 => pixel_7,
 			pixel_8 => pixel_8, 
 			pixel_9 => pixel_9
-			);
+		);
 	
     ------------------------------------------
     -- SIMULATION DE L'HORLOGE
@@ -88,8 +91,8 @@ architecture arch_buffer_module_tb of buffer_module_tb is
 
     process
 
-		variable rd_line: line;
-		variable tmp: std_logic_vector(3 downto 0);
+        variable rd_line: line;
+        variable tmp: std_logic_vector(3 downto 0);
 
         file vector_file: text open read_mode is "test.txt";
 
@@ -107,15 +110,16 @@ architecture arch_buffer_module_tb of buffer_module_tb is
         reset <= '0';
 
 
-            while not endfile(vector_file) loop
-                readline(vector_file, rd_line);
-                read(rd_line, tmp);
-                d <= tmp;
-                wait for period;
-                x <= std_logic_vector(unsigned(x) + 1);
-            end loop;
+        while not endfile(vector_file) loop
+            readline(vector_file, rd_line);
+            read(rd_line, tmp);
+            d <= tmp;
+            wait for period;
+            x <= std_logic_vector(unsigned(x) + 1);
+        end loop;
 
-            wait;
+        wait;
+
     end process;
 	
 	
