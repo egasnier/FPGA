@@ -20,22 +20,22 @@ set_property -dict {PACKAGE_PIN D20 IOSTANDARD LVCMOS33} [get_ports reset]
 #set_property -dict {PACKAGE_PIN D19 IOSTANDARD LVCMOS33} [get_ports bouton_1]
 
 ## Pmod Header JA
-set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33} [get_ports {Out_pix_R[0]}]
-set_property -dict {PACKAGE_PIN Y19 IOSTANDARD LVCMOS33} [get_ports {Out_pix_R[1]}]
-set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33} [get_ports {Out_pix_R[2]}]
-set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33} [get_ports {Out_pix_R[3]}]
-set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports {Out_pix_B[0]}]
-set_property -dict {PACKAGE_PIN U19 IOSTANDARD LVCMOS33} [get_ports {Out_pix_B[1]}]
-set_property -dict {PACKAGE_PIN W18 IOSTANDARD LVCMOS33} [get_ports {Out_pix_B[2]}]
-set_property -dict {PACKAGE_PIN W19 IOSTANDARD LVCMOS33} [get_ports {Out_pix_B[3]}]
+set_property -dict {PACKAGE_PIN Y18 IOSTANDARD LVCMOS33} [get_ports {out_filt_R[0]}]
+set_property -dict {PACKAGE_PIN Y19 IOSTANDARD LVCMOS33} [get_ports {out_filt_R[1]}]
+set_property -dict {PACKAGE_PIN Y16 IOSTANDARD LVCMOS33} [get_ports {out_filt_R[2]}]
+set_property -dict {PACKAGE_PIN Y17 IOSTANDARD LVCMOS33} [get_ports {out_filt_R[3]}]
+set_property -dict {PACKAGE_PIN U18 IOSTANDARD LVCMOS33} [get_ports {out_filt_B[0]}]
+set_property -dict {PACKAGE_PIN U19 IOSTANDARD LVCMOS33} [get_ports {out_filt_B[1]}]
+set_property -dict {PACKAGE_PIN W18 IOSTANDARD LVCMOS33} [get_ports {out_filt_B[2]}]
+set_property -dict {PACKAGE_PIN W19 IOSTANDARD LVCMOS33} [get_ports {out_filt_B[3]}]
 
 ## Pmod Header JB
-set_property -dict {PACKAGE_PIN W14 IOSTANDARD LVCMOS33} [get_ports {Out_pix_G[0]}]
-set_property -dict {PACKAGE_PIN Y14 IOSTANDARD LVCMOS33} [get_ports {Out_pix_G[1]}]
-set_property -dict {PACKAGE_PIN T11 IOSTANDARD LVCMOS33} [get_ports {Out_pix_G[2]}]; #IO_L1P_T0_34 Sch=jb_p[2]
-set_property -dict {PACKAGE_PIN T10 IOSTANDARD LVCMOS33} [get_ports {Out_pix_G[3]}]; #IO_L1N_T0_34 Sch=jb_n[2]
-set_property -dict {PACKAGE_PIN V16 IOSTANDARD LVCMOS33} [get_ports {hsync}]
-set_property -dict {PACKAGE_PIN W16 IOSTANDARD LVCMOS33} [get_ports {vsync}]
+set_property -dict {PACKAGE_PIN W14 IOSTANDARD LVCMOS33} [get_ports {out_filt_G[0]}]
+set_property -dict {PACKAGE_PIN Y14 IOSTANDARD LVCMOS33} [get_ports {out_filt_G[1]}]
+set_property -dict {PACKAGE_PIN T11 IOSTANDARD LVCMOS33} [get_ports {out_filt_G[2]}]; #IO_L1P_T0_34 Sch=jb_p[2]
+set_property -dict {PACKAGE_PIN T10 IOSTANDARD LVCMOS33} [get_ports {out_filt_G[3]}]; #IO_L1N_T0_34 Sch=jb_n[2]
+set_property -dict {PACKAGE_PIN V16 IOSTANDARD LVCMOS33} [get_ports {hsync_shifted}]
+set_property -dict {PACKAGE_PIN W16 IOSTANDARD LVCMOS33} [get_ports {vsync_shifted}]
 #set_property -dict {PACKAGE_PIN V12 IOSTANDARD LVCMOS33} [get_ports {Out_pix_G[2]}]
 #set_property -dict {PACKAGE_PIN W13 IOSTANDARD LVCMOS33} [get_ports {Out_pix_G[3]}]
 
@@ -146,7 +146,4 @@ set_property -dict {PACKAGE_PIN W16 IOSTANDARD LVCMOS33} [get_ports {vsync}]
 #set_property -dict { PACKAGE_PIN K19   IOSTANDARD LVCMOS33 } [get_ports { user_dio[12] }]; #IO_L10P_T1_AD11P_35 Sch=user_dio[12]
 
 
-
-
-connect_debug_port u_ila_0/clk [get_nets [list mapping_PLL/inst/clk_25]]
 

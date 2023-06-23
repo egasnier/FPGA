@@ -71,6 +71,9 @@ architecture behavioral of shift_sync is
                 hsync_reg1 <= '0';
                 vsync_reg0 <= '0';
                 vsync_reg1 <= '0';
+                
+                cmd_reg0   <= '0';
+                cmd_reg1   <= '0';
  
             elsif rising_edge(clk) then
                 current_state <= next_state;     -- Passage à l'état suivant

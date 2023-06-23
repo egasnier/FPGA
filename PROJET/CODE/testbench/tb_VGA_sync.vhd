@@ -29,6 +29,9 @@ architecture behavioral of tb_VGA_sync is
     signal clk_25      : std_logic := '0';
     signal hsync       : std_logic;
     signal vsync       : std_logic;
+    signal x           : std_logic_vector(9 downto 0);
+    signal y           : std_logic_vector(9 downto 0);
+    signal end_count_x : std_logic;
     signal in_display  : std_logic;
 
     ------------------------------------------
@@ -70,6 +73,9 @@ architecture behavioral of tb_VGA_sync is
             reset       : in std_logic; 
             hsync   	: out std_logic;
             vsync   	: out std_logic;
+            x           : out std_logic_vector(9 downto 0);
+            y           : out std_logic_vector(9 downto 0);
+            end_count_x : out std_logic;
             in_display	: out std_logic
         );
 	end component;
@@ -97,6 +103,9 @@ architecture behavioral of tb_VGA_sync is
             reset      => reset,
             hsync      => hsync,
             vsync      => vsync,
+            x          => x,
+            y          => y,
+            end_count_x => end_count_x,
             in_display => in_display
         );
 
