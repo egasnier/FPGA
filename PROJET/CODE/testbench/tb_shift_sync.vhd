@@ -27,8 +27,8 @@ architecture behavioral of tb_shift_sync is
 
     signal reset         : std_logic := '1';
     signal clk           : std_logic := '0';
-    signal hsync         : std_logic := '0';
-    signal vsync         : std_logic := '0';
+    signal x             : std_logic_vector(9 downto 0) := (others => '0');
+    signal y             : std_logic_vector(9 downto 0) := (others => '0');
     signal end_count_x   : std_logic := '0';
     signal hsync_shifted : std_logic;
     signal vsync_shifted : std_logic;
@@ -45,15 +45,25 @@ architecture behavioral of tb_shift_sync is
     -- DECLARATION DU COMPOSANT VGA_sync
     ------------------------------------------
     component shift_sync
-        port ( 
-            clk            : in std_logic;            -- Horloge
-            reset          : in std_logic;            -- Entrée pour RESET des registres
-            hsync          : in std_logic;            -- Synchronization horizontale
-            vsync          : in std_logic;            -- Synchronization verticale
-            end_count_x    : in std_logic;            -- Fin de lecture d'une ligne
-            hsync_shifted  : out std_logic;           -- Synchronization horizontale retardée de 802 pixels
-            vsync_shifted  : out std_logic            -- Synchronization verticale retardée de 802 pixels
-        );
+    generic (
+        H_PIX          : integer;                 -- Taille de l'image horizontale
+        H_FPORCH       : integer;                 -- Front porch horizontal
+        HSYNC_SIZE     : integer;                 -- Horizontal sync pulse
+        H_BPORCH       : integer;                 -- Back porch horizontal
+        V_PIX          : integer;                 -- Taille de l'image verticale
+        V_FPORCH       : integer;                 -- Front porch vertical
+        VSYNC_SIZE     : integer;                 -- Vertical sync pulse
+        V_BPORCH       : integer                  -- Back porch vertical
+    );
+    port ( 
+        clk            : in std_logic;            -- Horloge
+        reset          : in std_logic;            -- Entrée pour RESET des registres
+        x              : in std_logic_vector(9 downto 0); -- Coordonnée X du pixel
+        y              : in std_logic_vector(9 downto 0); -- Coordonnée y du pixel
+        end_count_x    : in std_logic;            -- Fin de lecture d'une ligne
+        hsync_shifted  : out std_logic;           -- Synchronization horizontale retardée de 802 pixels
+        vsync_shifted  : out std_logic            -- Synchronization verticale retardée de 802 pixels
+    );
 	end component;
 
 
@@ -64,11 +74,21 @@ architecture behavioral of tb_shift_sync is
     --------------------------	
     --Affectation des signaux du testbench avec ceux de l'entite count_x
     mapping_shift_sync: shift_sync
+        generic map (
+            H_PIX          => 640,
+            H_FPORCH       => 16,
+            HSYNC_SIZE     => 96,
+            H_BPORCH       => 48,
+            V_PIX          => 480,
+            V_FPORCH       => 10,
+            VSYNC_SIZE     => 2,
+            V_BPORCH       => 33
+        )
         port map (
             clk            => clk,
             reset          => reset,
-            hsync          => hsync,
-            vsync          => vsync,
+            x              => x,
+            y              => y,
             end_count_x    => end_count_x,
             hsync_shifted  => hsync_shifted,
             vsync_shifted  => vsync_shifted
@@ -80,8 +100,49 @@ architecture behavioral of tb_shift_sync is
     ------------------------------------------
     process
     begin
-        wait for hp;
         clk <= not clk;
+        wait for hp;
+    end process;
+
+
+    ------------------------------------------
+    -- SIMULATION DE X
+    ------------------------------------------
+    process
+    begin
+        if reset = '1' then
+            x <= (others => '0');
+        else if x = "1100011111" then
+                x <= (others => '0');
+                end_count_x <= '1';
+            else
+                x <= std_logic_vector(unsigned(x) + 1);
+                end_count_x <= '0';
+            end if;
+        end if;
+        wait for period;
+    end process;
+
+
+    ------------------------------------------
+    -- SIMULATION DE Y
+    ------------------------------------------
+    process
+    begin
+        if reset = '1' then
+            y <= (others => '0');
+        else if y = "1000001101" then
+                y <= (others => '0');
+            else
+                y <= std_logic_vector(unsigned(y) + 1); 
+            end if;
+        end if;
+
+        -- counting for 800 periods
+        for i in 0 to 799 loop
+            wait for period;
+        end loop;
+
     end process;
 
 
@@ -90,8 +151,6 @@ architecture behavioral of tb_shift_sync is
         ---------------------------------------------
         -- INITIALISATION
         ---------------------------------------------
-        -- counting for 2 periods - Waiting before reset
-        wait for (2 * period);
         -- signal reset a 1
         reset <= '1';
         -- counting for 1 period
@@ -104,10 +163,8 @@ architecture behavioral of tb_shift_sync is
         -- FIRST TEST BEFORE end_count_x = 1
         -- Expected results : hsync_shifted and vsync_shifted equal to 1
         ---------------------------------------------
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 656 periods
-        for i in 0 to 655 loop
+        -- counting for 799 periods
+        for i in 0 to 798 loop
             assert hsync_shifted = '1'
                         report "ERROR: hsync_shifted not equals to 1" severity failure;
             assert vsync_shifted = '1'
@@ -115,44 +172,17 @@ architecture behavioral of tb_shift_sync is
             wait for period;
         end loop;
 
-        hsync <= '0';
-        vsync <= '0';
-        -- counting for 96 periods
-        for i in 0 to 95 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
-
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 48 periods
-        for i in 0 to 47 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
         
         
         ---------------------------------------------
         -- SECOND TEST AFTER end_count_x = 1
         -- Expected results :
-        -- hsync_shifted and vsync_shifted equal to equal to hsync and vsync shifted of two periods
+        -- hsync_shifted equal to hsync shifted of two periods
+        -- vsync_shifted equals to 1
         ---------------------------------------------
-        end_count_x <= '1';
-        -- counting for 1 period
-        wait for period;
-        end_count_x <= '0';
-
-
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 656 periods
-        for i in 0 to 655 loop
+    
+        -- counting for 658 periods
+        for i in 0 to 657 loop
             assert hsync_shifted = '1'
                         report "ERROR: hsync_shifted not equals to 1" severity failure;
             assert vsync_shifted = '1'
@@ -160,10 +190,9 @@ architecture behavioral of tb_shift_sync is
             wait for period;
         end loop;
 
-        hsync <= '0';
-        vsync <= '0';
         -- counting for 2 periods
         for i in 0 to 1 loop
+            --x <= std_logic_vector(unsigned(x) + 1);
             assert hsync_shifted = '1'
                         report "ERROR: hsync_shifted not equals to 1" severity failure;
             assert vsync_shifted = '1'
@@ -171,132 +200,20 @@ architecture behavioral of tb_shift_sync is
             wait for period;
         end loop;
 
-        -- counting for 94 periods
-        for i in 0 to 93 loop
-            assert hsync_shifted = '0'
-                        report "ERROR: hsync_shifted not equals to 0" severity failure;
-            assert vsync_shifted = '0'
-                        report "ERROR: vsync_shifted not equals to 0" severity failure;
-            wait for period;
-        end loop;
-
-
-
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 2 periods
-        for i in 0 to 1 loop
-            assert hsync_shifted = '0'
-                        report "ERROR: hsync_shifted not equals to 0" severity failure;
-            assert vsync_shifted = '0'
-                        report "ERROR: vsync_shifted not equals to 0" severity failure;
-            wait for period;
-        end loop;
-
-        -- counting for 48 periods
-        for i in 0 to 47 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
-
-
-
-        ---------------------------------------------
-        -- THIRD TEST AFTER A NEW end_count_x = 1
-        -- Expected results :
-        -- hsync_shifted and vsync_shifted equal to equal to hsync and vsync shifted of two periods
-        ---------------------------------------------
-        end_count_x <= '1';
-        -- counting for 1 period
-        wait for period;
-        end_count_x <= '0';
-
-
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 656 periods
-        for i in 0 to 655 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
-
-        hsync <= '0';
-        vsync <= '0';
-        -- counting for 2 periods
-        for i in 0 to 1 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
-
-        -- counting for 94 periods
-        for i in 0 to 93 loop
-            assert hsync_shifted = '0'
-                        report "ERROR: hsync_shifted not equals to 0" severity failure;
-            assert vsync_shifted = '0'
-                        report "ERROR: vsync_shifted not equals to 0" severity failure;
-            wait for period;
-        end loop;
-
-
-
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 2 periods
-        for i in 0 to 1 loop
-            assert hsync_shifted = '0'
-                        report "ERROR: hsync_shifted not equals to 0" severity failure;
-            assert vsync_shifted = '0'
-                        report "ERROR: vsync_shifted not equals to 0" severity failure;
-            wait for period;
-        end loop;
-
-        -- counting for 48 periods
-        for i in 0 to 47 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
-
-
-        ---------------------------------------------
-        -- FOURTH TEST AFTER A RESET
-        -- Expected results : hsync_shifted and vsync_shifted equal to 1
-        ---------------------------------------------
-                -- signal reset a 1
-        reset <= '1';
-        -- counting for 1 period
-        wait for period;
-        -- signal reset a 0
-        reset <= '0';
-
-
-
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 656 periods
-        for i in 0 to 655 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
-
-        hsync <= '0';
-        vsync <= '0';
         -- counting for 96 periods
         for i in 0 to 95 loop
+            --x <= std_logic_vector(unsigned(x) + 1);
+            assert hsync_shifted = '0'
+                        report "ERROR: hsync_shifted not equals to 0" severity failure;
+            assert vsync_shifted = '1'
+                        report "ERROR: vsync_shifted not equals to 1" severity failure;
+            wait for period;
+        end loop;
+
+
+        -- counting for 48 periods
+        for i in 0 to 47 loop
+            --x <= std_logic_vector(unsigned(x) + 1);
             assert hsync_shifted = '1'
                         report "ERROR: hsync_shifted not equals to 1" severity failure;
             assert vsync_shifted = '1'
@@ -304,84 +221,26 @@ architecture behavioral of tb_shift_sync is
             wait for period;
         end loop;
 
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 48 periods
-        for i in 0 to 47 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
 
 
         ---------------------------------------------
-        -- FITH TEST AFTER end_count_x = 1
+        -- THIRD TEST AFTER 490 raws 
         -- Expected results :
-        -- hsync_shifted and vsync_shifted equal to equal to hsync and vsync shifted of two periods
+        -- vsync_shifted shifted of two periods
         ---------------------------------------------
-        end_count_x <= '1';
-        -- counting for 1 period
-        wait for period;
-        end_count_x <= '0';
-
-
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 656 periods
-        for i in 0 to 655 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
+        -- counting for 489 raws
+        for j in 0 to 488 loop
+            for i in 0 to 799 loop
+                wait for period;
+            end loop;
         end loop;
-
-        hsync <= '0';
-        vsync <= '0';
-        -- counting for 2 periods
-        for i in 0 to 1 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
+        
+        for i in 0 to 799 loop
             wait for period;
-        end loop;
-
-        -- counting for 94 periods
-        for i in 0 to 93 loop
-            assert hsync_shifted = '0'
-                        report "ERROR: hsync_shifted not equals to 0" severity failure;
             assert vsync_shifted = '0'
-                        report "ERROR: vsync_shifted not equals to 0" severity failure;
-            wait for period;
-        end loop;
-
-
-
-        hsync <= '1';
-        vsync <= '1';
-        -- counting for 2 periods
-        for i in 0 to 1 loop
-            assert hsync_shifted = '0'
-                        report "ERROR: hsync_shifted not equals to 0" severity failure;
-            assert vsync_shifted = '0'
-                        report "ERROR: vsync_shifted not equals to 0" severity failure;
-            wait for period;
-        end loop;
-
-        -- counting for 48 periods
-        for i in 0 to 47 loop
-            assert hsync_shifted = '1'
-                        report "ERROR: hsync_shifted not equals to 1" severity failure;
-            assert vsync_shifted = '1'
-                        report "ERROR: vsync_shifted not equals to 1" severity failure;
-            wait for period;
-        end loop;
-
-
-
+                report "ERROR: vsync_shifted not equals to 0" severity failure;
+        end loop;        
+        
 
         wait;
 	   

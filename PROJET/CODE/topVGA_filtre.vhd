@@ -60,6 +60,7 @@ architecture Behavioral of topVGA_filtre is
         signal s_locked : std_logic := '0';    -- Signal  s_locked le resten de vga_sync
         signal lockedn  : std_logic := '0';    -- Signal  s_locked le resten de vga_sync 
                          
+
         ------------------------------------------------------------------------------
         -- SIGNAUX INTERNES topVGA_filtre
         ---------------------------------------------------------------------------
@@ -76,7 +77,7 @@ architecture Behavioral of topVGA_filtre is
         signal Out_pix_G      : std_logic_vector(3 downto 0); 
         signal data_read      : std_logic_vector(3 downto 0):= "0000";
         signal cmd_conv       : std_logic := '0';
- 
+
          
  
         ------------------------------------------
@@ -90,6 +91,7 @@ architecture Behavioral of topVGA_filtre is
             locked  	       : out std_logic     -- bouton de reset
         );
         end component;	
+
 
         ------------------------------------------
         -- DECLARATION DU COMPOSANT VGA_sync
@@ -136,6 +138,8 @@ architecture Behavioral of topVGA_filtre is
         );
         end component;
 
+
+
         ------------------------------------------------
         -- DECLARATION DU COMPOSANT system_conv
         --------------------------------------------------
@@ -162,8 +166,8 @@ architecture Behavioral of topVGA_filtre is
         port ( 
             clk            : in std_logic;            -- Horloge
             reset          : in std_logic;            -- Entrée pour RESET des registres
-            hsync          : in std_logic;            -- Synchronization horizontale
-            vsync          : in std_logic;            -- Synchronization verticale
+            x              : in std_logic_vector(9 downto 0);  -- Coordonnée X du pixel
+            y              : in std_logic_vector(9 downto 0);  -- Coordonnée y du pixel
             end_count_x    : in std_logic;            -- Fin de lecture d'une ligne
             cmd_conv       : out std_logic;           -- Signal de commande du module convolution
             hsync_shifted  : out std_logic;           -- Synchronization horizontale retardée de 802 pixels
@@ -187,7 +191,7 @@ architecture Behavioral of topVGA_filtre is
             locked => s_locked
         );               	
 
-    --- Process du locked et le resetn du VGA_sync
+    -- Process du locked et le resetn du VGA_sync
     lockedn <= not(s_locked);
    
     --Affectation des signaux du module Vga_sync
@@ -213,6 +217,7 @@ architecture Behavioral of topVGA_filtre is
         in_display  => in_display   
     );
 	
+
     --Affectation des signaux du module Gen_mir
     mapping_Gen_mir : Gen_mir
     generic map (
@@ -227,6 +232,7 @@ architecture Behavioral of topVGA_filtre is
         Out_pix_G =>  Out_pix_G  
     );
    
+
     -- Affectation des signaux du testbench avec ceux de l'entite System_conv
     Systeme: System_conv
     generic map (
@@ -243,13 +249,15 @@ architecture Behavioral of topVGA_filtre is
         out_filt_G    => out_filt_G          
     );
  
+			 
+ 
     --Affectation des signaux du testbench avec ceux de l'entite shift_sync
     Shift: shift_sync
     port map (
         clk           => clk_25, 
         reset         => lockedn,
-        hsync         => hsync , 
-        vsync         => vsync ,  
+        x             => x, 
+        y             => y,  
         end_count_x   => end_count_x,
         cmd_conv      => cmd_conv,
         hsync_shifted => hsync_shifted, 
