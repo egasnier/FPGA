@@ -56,8 +56,9 @@ architecture Behavioral of System_conv is
             cmd_conv   : in std_logic;
             out_filt_1 : out std_logic_vector(3 downto 0);      -- Id matrix
             out_filt_2 : out std_logic_vector(3 downto 0);      -- Gaussian filter
-            out_filt_3 : out std_logic_vector(3 downto 0);      -- To be defined
-            out_filt_4 : out std_logic_vector(3 downto 0)       -- To be defined
+            out_filt_3 : out std_logic_vector(3 downto 0);      -- Sobel horizontal
+            out_filt_4 : out std_logic_vector(3 downto 0);      -- Sobel vertical
+            out_filt_5 : out std_logic_vector(3 downto 0)       -- Edge detection
         );
 
     end component;
@@ -67,6 +68,7 @@ architecture Behavioral of System_conv is
     signal out_filt_2 : std_logic_vector(3 downto 0);
     signal out_filt_3 : std_logic_vector(3 downto 0);
     signal out_filt_4 : std_logic_vector(3 downto 0);
+    signal out_filt_5 : std_logic_vector(3 downto 0);
     signal out_mux    : std_logic_vector(3 downto 0);
     signal p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9 : std_logic_vector(3 downto 0);
 
@@ -111,7 +113,8 @@ begin
             out_filt_1     => out_filt_1,
             out_filt_2     => out_filt_2,
             out_filt_3     => out_filt_3,
-            out_filt_4     => out_filt_4
+            out_filt_4     => out_filt_4,
+            out_filt_5     => out_filt_5
         );
         
     -----------------------------------------
@@ -121,7 +124,8 @@ begin
     out_mux <=  out_filt_1 when filter_sel = "000" else
                 out_filt_2 when filter_sel = "001" else
                 out_filt_3 when filter_sel = "010" else
-                out_filt_4;
+                out_filt_4 when filter_sel = "011" else
+                out_filt_5;
            
     --Sortie de l'mage filtrée
     out_filt_R <= out_mux; 

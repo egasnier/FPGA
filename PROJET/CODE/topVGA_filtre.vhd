@@ -9,8 +9,9 @@
 -- Description: 2D convolution with kernel 3x3
 -- Output 1: Id matrix
 -- Output 2: Gaussian filtering
--- Output 3: ?
--- Output 4: ?
+-- Output 3: Sobel horizontal
+-- Output 4: Sobel vertical
+-- Output 5: Edge detection
 -- 
 -- Dependencies: Pmod VGA (digilent)
 -- 
@@ -126,7 +127,7 @@ architecture Behavioral of topVGA_filtre is
         ------------------------------------------
         component Gen_mir
         generic (
-            square_width    : integer := 40   -- taille du carré en pixels
+            square_width    : integer        -- taille du carré en pixels
         );
         port (
             in_display     : in std_logic;                                           -- Signal indiquant si l'images sont dans la zone d'affichage
