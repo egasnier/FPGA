@@ -6,63 +6,63 @@ end tb_tp_fsm;
 
 architecture behavioral of tb_tp_fsm is
 
-	signal clk         : std_logic := '0';
-	signal resetn      : std_logic := '0';
-	signal btn_restart : std_logic := '0';
+	signal clk               : std_logic := '0';
+	signal resetn            : std_logic := '0';
+	signal btn_restart       : std_logic := '0';
 	signal end_counter_cycle : std_logic;
 	signal out_LED_R         : std_logic;
 	signal out_LED_B         : std_logic;
 	signal out_LED_G         : std_logic;
 	
 	-- Les constantes suivantes permette de definir la frequence de l'horloge 
-	constant hp : time := 5 ns;               -- demi periode de 5ns
-	constant period : time := 2*hp;           -- periode de 10ns, soit une frequence de 100Hz
-	constant count_max : natural := 1000;     -- nombre de periodes max correspondant au compteur de période
-	constant count_max_cycle : natural := 3;  -- nombre de cycle max correspondant au compteur de cycle
+	constant hp              : time    := 5 ns;   -- demi periode de 5ns
+	constant period          : time    := 2*hp;   -- periode de 10ns, soit une frequence de 100Hz
+	constant count_max       : natural := 1000;   -- nombre de periodes max correspondant au compteur de période
+	constant count_max_cycle : natural := 3;      -- nombre de cycle max correspondant au compteur de cycle
 	
 	
-	component tp_fsm
-	    generic(
-	       count_max_cycle    : natural
-	    );
-		port ( 
-			clk			      : in std_logic; 
-			resetn		      : in std_logic;
-			btn_restart       : in std_logic;
-		    end_counter_cycle : out std_logic;
-		    out_LED_R         : out std_logic;
-	        out_LED_B         : out std_logic;
-	        out_LED_G         : out std_logic
-		 );
-	end component;
+    component tp_fsm
+    generic(
+        count_max_cycle   : natural
+    );
+    port ( 
+        clk               : in std_logic; 
+        resetn            : in std_logic;
+        btn_restart       : in std_logic;
+        end_counter_cycle : out std_logic;
+        out_LED_R         : out std_logic;
+        out_LED_B         : out std_logic;
+        out_LED_G         : out std_logic
+    );
+    end component;
 	
 	
 
 	begin
 	dut: tp_fsm
-	    generic map(
-	       count_max_cycle => 3
-	    )
+        generic map(
+            count_max_cycle => 3
+        )
         port map (
-            clk => clk, 
-            resetn => resetn,
-            btn_restart => btn_restart,
-			end_counter_cycle => end_counter_cycle,
-		    out_LED_R => out_LED_R,
-	        out_LED_B => out_LED_B,
-	        out_LED_G => out_LED_G
+            clk               => clk, 
+            resetn            => resetn,
+            btn_restart       => btn_restart,
+            end_counter_cycle => end_counter_cycle,
+            out_LED_R         => out_LED_R,
+            out_LED_B         => out_LED_B,
+            out_LED_G         => out_LED_G
         );
 		
-	--Simulation du signal d'horloge en continue
-	process
+    --Simulation du signal d'horloge en continue
+    process
     begin
-		wait for hp;
-		clk <= not clk;
-	end process;
+        wait for hp;
+        clk <= not clk;
+    end process;
 
 
-	process
-	begin        
+    process
+    begin        
 	   --------------------------------------------------------------------------
 	    -- INITIALISATION                                                      --
 	   --------------------------------------------------------------------------
@@ -89,7 +89,7 @@ architecture behavioral of tb_tp_fsm is
 	   -- Les 3 LED doivent clignoter 3 fois en meme temps                     --
 	   --------------------------------------------------------------------------
 	   -- counting for count_max_cycle cycles
-       wait for ((count_max - 1) * period);
+	   wait for ((count_max - 1) * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -104,7 +104,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -119,7 +119,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -134,7 +134,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -149,7 +149,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -164,7 +164,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 1
 	   assert end_counter_cycle = '1'
@@ -183,7 +183,7 @@ architecture behavioral of tb_tp_fsm is
 	   -- La LED Rouge doit clignoter 3 fois.                                  --
 	   --------------------------------------------------------------------------
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -198,7 +198,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -213,7 +213,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -228,7 +228,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -243,7 +243,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -258,7 +258,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 1
 	   assert end_counter_cycle = '1'
@@ -277,7 +277,7 @@ architecture behavioral of tb_tp_fsm is
 	   -- La LED Bleue doit clignoter 3 fois.                                  --
 	   --------------------------------------------------------------------------
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -292,7 +292,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -307,7 +307,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -322,7 +322,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -337,7 +337,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -352,7 +352,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 1
 	   assert end_counter_cycle = '1'
@@ -371,7 +371,7 @@ architecture behavioral of tb_tp_fsm is
 	   -- La LED Verte doit clignoter 3 fois.                                  --
 	   --------------------------------------------------------------------------
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -386,7 +386,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -401,7 +401,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -416,7 +416,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -431,7 +431,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -446,7 +446,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 1
 	   assert end_counter_cycle = '1'
@@ -466,7 +466,7 @@ architecture behavioral of tb_tp_fsm is
 	   -- La LED Rouge doit clignoter 3 fois.                                  --
 	   --------------------------------------------------------------------------
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -481,7 +481,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -496,7 +496,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -522,7 +522,7 @@ architecture behavioral of tb_tp_fsm is
 	   
 	   
 	   -- counting for count_max_cycle cycles
-       wait for ((count_max - 10) * period);
+	   wait for ((count_max - 10) * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -537,7 +537,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -552,7 +552,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -567,7 +567,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -582,7 +582,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '0'
@@ -597,7 +597,7 @@ architecture behavioral of tb_tp_fsm is
 
 
 	   -- counting for count_max_cycle cycles
-       wait for (count_max * period);
+	   wait for (count_max * period);
 	   -- Valeurs des sorties attendues
 	   -- end_counter_cycle = 0
 	   assert end_counter_cycle = '1'
@@ -612,7 +612,7 @@ architecture behavioral of tb_tp_fsm is
 
 
    
-		wait;
+	   wait;
 	    
 	end process;
 	

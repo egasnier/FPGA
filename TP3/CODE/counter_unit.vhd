@@ -7,10 +7,10 @@ use ieee.std_logic_unsigned.all;
 entity counter_unit is
     generic( count_max : natural := 2000 );  -- Valeur du nombre de périodes à compter
     port ( 
-		clk			   : in std_logic;    -- Horloge
-		resetn         : in std_logic;    -- Entrée pour RESET des registres
-        end_counter	   : out std_logic    -- Sortie indiquant la fin du comptage
-     );
+        clk            : in std_logic;    -- Horloge
+        resetn         : in std_logic;    -- Entrée pour RESET des registres
+        end_counter    : out std_logic    -- Sortie indiquant la fin du comptage
+    );
 end counter_unit;
 
 architecture behavioral of counter_unit is

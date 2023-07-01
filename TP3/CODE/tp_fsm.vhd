@@ -7,14 +7,14 @@ use ieee.std_logic_unsigned.all;
 entity tp_fsm is
     generic( count_max_cycle : natural := 3 );  -- Valeur du nombre de cycle à compter
     port ( 
-		clk			      : in std_logic; 
+        clk			      : in std_logic; 
         resetn		      : in std_logic;
         btn_restart       : in std_logic;
-		end_counter_cycle : out std_logic;
-	    out_LED_R         : out std_logic;
-	    out_LED_B         : out std_logic;
-	    out_LED_G         : out std_logic       
-     );
+        end_counter_cycle : out std_logic;
+        out_LED_R         : out std_logic;
+        out_LED_B         : out std_logic;
+        out_LED_G         : out std_logic       
+    );
 end tp_fsm;
 
 
@@ -37,30 +37,30 @@ architecture behavioral of tp_fsm is
     signal cmd_state_G : std_logic := '0';           -- Commande de pilotage de la LED Verte
     
     
-	--Declaration de l'entite counter_unit (compteur générant le signal end_counter)
-	component counter_unit
-	    generic(
-	       count_max       : natural
-	    );
-		port ( 
-		   clk			    : in std_logic;
-		   resetn           : in std_logic;
-		   end_counter	    : out std_logic
-		);
-	end component;
+    --Declaration de l'entite counter_unit (compteur générant le signal end_counter)
+    component counter_unit
+        generic(
+            count_max       : natural
+        );
+        port ( 
+            clk             : in std_logic;
+            resetn          : in std_logic;
+            end_counter     : out std_logic
+        );
+    end component;
 	
 
-	begin
+    begin
 	
-	--Affectation des signaux du compteur de cycle avec ceux de counter_unit
-	uut: counter_unit
-	    generic map(
-	       count_max => 100000000
-	    )
+    --Affectation des signaux du compteur de cycle avec ceux de counter_unit
+    uut: counter_unit
+        generic map(
+            count_max => 100000000
+        )
         port map (
-           clk => clk,
-           resetn => resetn,
-           end_counter => cmd_cnt
+            clk         => clk,
+            resetn      => resetn,
+            end_counter => cmd_cnt
         );
 	
 
