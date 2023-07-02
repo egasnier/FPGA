@@ -6,7 +6,7 @@
 ## TP4 - Partie 1: Pilotage de LEDs
 ## TP4 - Partie 2: Pilotage de LEDs et Mémoire (utilisation de FIFO)
 ## TP5 - Domaines d'horloge (utilisation de PLL)
-## Projet1 - Réalisation d'une IP de traitement d'image sur cible Zynq7020 avec affichage VGA
+## Projet1 - Réalisation d'une IP de traitement d'image sur cible Zynq7020 avec affichage VGA (2D convolution - kernel 3x3)
 ![Alt text](image.png)
 ## Projet2 - Déplacement d'un carré dans un écran VGA
 ![Alt text](image-1.png)
