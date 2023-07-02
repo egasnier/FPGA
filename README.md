@@ -6,10 +6,17 @@
 ## TP4 - Partie 1: Pilotage de LEDs
 ## TP4 - Partie 2: Pilotage de LEDs et Mémoire (utilisation de FIFO)
 ## TP5 - Domaines d'horloge (utilisation de PLL)
-## Projet: Démarrage le 2 juin 2023
+## Projet1 - Réalisation d'une IP de traitement d'image sur cible Zynq7020 avec affichage VGA
+![Alt text](image.png)
+## Projet2 - Déplacement d'un carré dans un écran VGA
+![Alt text](image-1.png)
 
 ## ANNEXE
-### Matériel utilisé:
+### Matériel utilisé :
 * Carte CoraZ7 (Xilinx)
+* Carte Pmod VGA (Digilent)
+* Oscilloscope Hantek
+### Logiciel utilisé :
 * Langage VHDL
-* Logiciel VIVADO
+* VIVADO
+* LTspice
