@@ -14,39 +14,39 @@ architecture behavioral of tb_tp_pilotage is
     signal out_LED_B   : std_logic;
 	
 	-- Les constantes suivantes permette de definir la frequence de l'horloge 
-	constant hp : time := 5 ns;               -- demi periode de 5ns
-	constant period : time := 2*hp;           -- periode de 10ns, soit une frequence de 100Hz
+	constant hp        : time    := 5 ns;     -- demi periode de 5ns
+	constant period    : time    := 2*hp;     -- periode de 10ns, soit une frequence de 100Hz
 	constant count_max : natural := 1000;     -- nombre de periodes max correspondant au compteur de période
 	
 	component tp_pilotage_LED
 		port ( 
-			clk			      : in std_logic; 
-			resetn		      : in std_logic;
-	        bouton_0	      : in std_logic;
-	        bouton_1	      : in std_logic;
-	        out_LED_G         : out std_logic;
-	        out_LED_B         : out std_logic
-		 );
-	end component;
+			clk               : in std_logic; 
+			resetn            : in std_logic;
+            bouton_0          : in std_logic;
+            bouton_1          : in std_logic;
+            out_LED_G         : out std_logic;
+            out_LED_B         : out std_logic
+        );
+    end component;
 	
 
 	begin
 	dut: tp_pilotage_LED
         port map (
-            clk => clk, 
-            resetn => resetn,
-            bouton_0 => bouton_0,
-            bouton_1 => bouton_1,
-	        out_LED_G => out_LED_G,
-	        out_LED_B => out_LED_B
+            clk       => clk, 
+            resetn    => resetn,
+            bouton_0  => bouton_0,
+            bouton_1  => bouton_1,
+            out_LED_G => out_LED_G,
+            out_LED_B => out_LED_B
         );
 		
 	--Simulation du signal d'horloge en continue
 	process
     begin
-		wait for hp;
-		clk <= not clk;
-	end process;
+        wait for hp;
+        clk <= not clk;
+    end process;
 
 
 	process

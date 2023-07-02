@@ -6,48 +6,48 @@ end tb_tp_pilotage;
 
 architecture behavioral of tb_tp_pilotage is
 
-	signal clk         : std_logic := '0';
-	signal resetn      : std_logic := '0';
-	signal bouton_0    : std_logic := '0';
-	signal out_LED_R         : std_logic;
-	signal out_LED_G         : std_logic;
+    signal clk               : std_logic := '0';
+    signal resetn            : std_logic := '0';
+    signal bouton_0          : std_logic := '0';
+    signal out_LED_R         : std_logic;
+    signal out_LED_G         : std_logic;
 	
-	-- Les constantes suivantes permette de definir la frequence de l'horloge 
-	constant hp : time := 5 ns;               -- demi periode de 5ns
-	constant period : time := 2*hp;           -- periode de 10ns, soit une frequence de 100Hz
-	constant count_max : natural := 1000;     -- nombre de periodes max correspondant au compteur de période
+    -- Les constantes suivantes permette de definir la frequence de l'horloge 
+    constant hp : time := 5 ns;               -- demi periode de 5ns
+    constant period : time := 2*hp;           -- periode de 10ns, soit une frequence de 100Hz
+    constant count_max : natural := 1000;     -- nombre de periodes max correspondant au compteur de période
 	
-	component tp_pilotage_LED
-		port ( 
-			clk			      : in std_logic; 
-			resetn		      : in std_logic;
-			bouton_0          : in std_logic;
-		    out_LED_R         : out std_logic;
-	        out_LED_G         : out std_logic
-		 );
-	end component;
+    component tp_pilotage_LED
+        port (
+            clk               : in std_logic; 
+            resetn            : in std_logic;
+            bouton_0          : in std_logic;
+            out_LED_R         : out std_logic;
+            out_LED_G         : out std_logic
+        );
+    end component;
 	
 
-	begin
-	dut: tp_pilotage_LED
+    begin
+    dut: tp_pilotage_LED
         port map (
-            clk => clk, 
-            resetn => resetn,
-            bouton_0 => bouton_0,
-		    out_LED_R => out_LED_R,
-	        out_LED_G => out_LED_G
+            clk       => clk, 
+            resetn    => resetn,
+            bouton_0  => bouton_0,
+            out_LED_R => out_LED_R,
+            out_LED_G => out_LED_G
         );
 		
-	--Simulation du signal d'horloge en continue
-	process
+    --Simulation du signal d'horloge en continue
+    process
     begin
-		wait for hp;
-		clk <= not clk;
-	end process;
+        wait for hp;
+        clk <= not clk;
+    end process;
 
 
-	process
-	begin        
+    process
+    begin        
 	   --------------------------------------------------------------------------
 	    -- INITIALISATION                                                      --
 	   --------------------------------------------------------------------------
@@ -84,8 +84,8 @@ architecture behavioral of tb_tp_pilotage is
 	   -- DEUXIEME TEST AVEC bouton_0 APPUYE                                   --
 	   -- Signal cmd_state_LED a l'etat HAUT                                   --
 	   --------------------------------------------------------------------------
-      -- Simulation de l'appui sur bouton_0
-      bouton_0 <= '1';
+	   -- Simulation de l'appui sur bouton_0
+	   bouton_0 <= '1';
 
 	   wait for period;
 	   -- Valeurs des sorties attendues
@@ -118,11 +118,11 @@ architecture behavioral of tb_tp_pilotage is
 	   -- TROISIEME TEST AVEC bouton_0 APPUYE                                  --
 	   -- Signal cmd_state_LED a l'etat BAS                                    --
 	   --------------------------------------------------------------------------
-       -- Simulation du relachement du bouton_0
+	   -- Simulation du relachement du bouton_0
 	   bouton_0 <= '0';
 	   wait for period*10;
 	   -- Simulation de l'appui sur bouton_0
-       bouton_0 <= '1';
+	   bouton_0 <= '1';
 
 	   wait for period;
 	   -- Valeurs des sorties attendues
@@ -154,7 +154,7 @@ architecture behavioral of tb_tp_pilotage is
 	   --------------------------------------------------------------------------
 	    -- QUATRIEME TEST AVEC APPUI SUR BOUTON resetn                         --
 	   --------------------------------------------------------------------------
-       -- Simulation du relachement du bouton_0
+	   -- Simulation du relachement du bouton_0
 	   bouton_0 <= '0';
 	   wait for period*10;    
 	   resetn <= '1';
@@ -180,10 +180,10 @@ architecture behavioral of tb_tp_pilotage is
 	   wait for count_max * period;	      
 
 	   --------------------------------------------------------------------------
-	    -- FIN DE TEST AVEC bouton_0 APPUYE                                    --
+	   -- FIN DE TEST AVEC bouton_0 APPUYE                                     --
 	   --------------------------------------------------------------------------
-       -- Simulation de l'appui sur bouton_0
-       bouton_0 <= '1';
+	   -- Simulation de l'appui sur bouton_0
+	   bouton_0 <= '1';
    
 	   wait;
 	    
