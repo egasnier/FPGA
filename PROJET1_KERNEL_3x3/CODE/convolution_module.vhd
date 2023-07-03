@@ -74,7 +74,7 @@ architecture arch_conv_module of convolution_module is
     	p_7_8b <= "0000" & p_7;
     	p_9_8b <= "0000" & p_9;
 
-        -- Multiplication by 4 and completion to 8 bits
+        -- Multiplication by 2 and completion to 8 bits
         p_2_8b <= "000" & p_2(3 downto 0) & "0";
         p_4_8b <= "000" & p_4(3 downto 0) & "0";
         p_6_8b <= "000" & p_6(3 downto 0) & "0";

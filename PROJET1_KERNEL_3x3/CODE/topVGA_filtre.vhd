@@ -127,7 +127,7 @@ architecture Behavioral of topVGA_filtre is
         ------------------------------------------
         component Gen_mir
         generic (
-            square_width    : integer        -- taille du carré en pixels
+            square_width    : integer            -- taille du carré en pixels
         );
         port (
             in_display     : in std_logic;                                           -- Signal indiquant si l'images sont dans la zone d'affichage
@@ -222,7 +222,7 @@ architecture Behavioral of topVGA_filtre is
     --Affectation des signaux du module Gen_mir
     mapping_Gen_mir : Gen_mir
     generic map (
-        square_width => 40   -- taille du carré en pixels
+        square_width => 40     -- taille du carré en pixels
     )
     port map (
         in_display => in_display,

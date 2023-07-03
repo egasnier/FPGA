@@ -1,10 +1,20 @@
--- SPDX-License-Identifier: MIT License
--- Copyright (c) 2021 Alberto Alvarez
-
--- Author:      Alberto Alvarez Gonzalez
--- Date:        6th January, 2021
--- File:        shift_register.vhd
--- Description: 3-bit free-running shift register in block of 8. Basic component of buffer module
+----------------------------------------------------------------------------------
+-- Engineer: Adjo Sefofo SOKPOR & Eric GASNIER
+-- 
+-- Create Date: 16.06.2023
+-- Module Name: shift_register
+-- Project Name: Image processing & VGA display
+-- Target Devices: coraZ7 (Xilinx)
+-- Tool Versions: VIVADO 2020.2
+-- Description: Component shift_register
+-- Buffer with 3 pixels
+-- 
+-- Dependencies: Pmod VGA (digilent)
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- 
+----------------------------------------------------------------------------------
 
 library ieee;
 use ieee.std_logic_1164.all;
