@@ -10,6 +10,8 @@
 ![Alt text](image.png)
 ## Projet2 - Déplacement d'un carré dans un écran VGA
 ![Alt text](image-1.png)
+## Projet3 - 2D convolution avec un filtre de Gauss de taille 5x5
+![Alt text](image-2.png)
 
 ## ANNEXE
 ### Matériel utilisé :
