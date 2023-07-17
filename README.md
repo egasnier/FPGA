@@ -1,4 +1,4 @@
-# TPs & PROJET de ma formation FPGA
+# TPs & PROJETS de ma formation FPGA
 
 ## TP1 - Full Adder
 ## TP2 - Compteur - Clignotement d'une LED
@@ -14,7 +14,7 @@ L'objet de ce chapitre est d'afficher une image filtrée de damier sur un écran
 ## Projet3 - 2D convolution avec un filtre de Gauss de taille 5x5
 ![Alt text](image-2.png)
 ## Projet4 - Détection de points d'intérêt (corner detection)
-Illustration avec le principe de fonctionnement d'une vue panaoramique.
+Illustration avec le principe de fonctionnement d'une vue panoramique.
 ![Alt text](image-3.png)
 
 ## ANNEXE
